@@ -16,6 +16,8 @@ namespace SpectroSaber
 		private void CreateBarMaterial() {
 			Shader shader = SpectroSaberController.Instance.assetBundle.LoadAsset<Shader>("Assets/Spectrogram/SpectroShader.shader");
 			_barMaterial = new Material(shader);
+			_barMaterial.SetFloat("_Glow", 0.25f);
+			_barMaterial.SetFloat("_FresnelGlow", 0.5f);
 		}
 
 		public void InstantiateBars(GameObject barPrefab) {

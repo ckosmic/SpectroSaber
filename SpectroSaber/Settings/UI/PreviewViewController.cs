@@ -25,6 +25,7 @@ namespace SpectroSaber.Settings.UI
 
 		private AudioSource _audioSource;
 		private BasicSpectrogramData _basicSpectrogramData;
+		private float _maxPreviewVolume = 0.5f;
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
@@ -56,7 +57,7 @@ namespace SpectroSaber.Settings.UI
 					if (_basicSpectrogramData.GetField<AudioSource>("_audioSource") == null) {
 						_basicSpectrogramData.SetField("_audioSource", _audioSource);
 					}
-					_audioSource.volume = Mathf.Lerp(_audioSource.volume, 0.8f, Time.deltaTime * 3);
+					_audioSource.volume = Mathf.Lerp(_audioSource.volume, _maxPreviewVolume, Time.deltaTime * 3);
 					if (SpectrogramManager.Instance.leftSpectro != null) {
 						SpectrogramManager.Instance.leftSpectro.UpdateSpectogramData(_basicSpectrogramData.ProcessedSamples);
 					}
@@ -118,6 +119,9 @@ namespace SpectroSaber.Settings.UI
 		}
 
 		IEnumerator IEInstantiateAudioSource() {
+			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<MainSettingsModelSO>().Any());
+			MainSettingsModelSO mainSettings = Resources.FindObjectsOfTypeAll<MainSettingsModelSO>().FirstOrDefault();
+			_maxPreviewVolume = mainSettings.volume * 0.5f;
 			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<BeatmapLevelsModel>().Any());
 			BeatmapLevelsModel levelsModel = Resources.FindObjectsOfTypeAll<BeatmapLevelsModel>().FirstOrDefault();
 			BeatmapLevelPackCollectionSO packCollectionSO = levelsModel.ostAndExtrasPackCollection;

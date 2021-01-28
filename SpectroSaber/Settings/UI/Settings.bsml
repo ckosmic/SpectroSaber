@@ -1,0 +1,12 @@
+﻿<bg xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:schemaLocation='https://monkeymanboy.github.io/BSML-Docs/ https://raw.githubusercontent.com/monkeymanboy/BSML-Docs/gh-pages/BSMLSchema.xsd'>
+	<settings-container>
+		<bool-setting text='Enabled' apply-on-change='true' value='enabled' hover-hint='Toggles whether to show the visualizer or not.'></bool-setting>
+		<slider-setting text='Transparency' apply-on-change='true' on-change='setting-changed' value='transparency' hover-hint='The transparency of the visualizer.' min='0' max='1' integer-only='false' increment='0.05'></slider-setting>
+		<slider-setting text='Intensity' apply-on-change='true' on-change='setting-changed' value='intensity' hover-hint='The intensity of the visualizer.' min='0' max='30' integer-only='true' increment='1'></slider-setting>
+		<slider-setting text='Thickness' apply-on-change='true' on-change='setting-changed' value='ss-thickness' hover-hint='The thickness of the bars.' min='0' max='2' integer-only='false' increment='0.1'></slider-setting>
+		<list-setting text='Transparency Mode' apply-on-change='true' on-change='setting-changed' value='trans-mode' choices='trans-modes' hover-hint='The method of transparency. Dither is more performant, Grabpass looks better.'></list-setting>
+		<slider-setting text='Offset' apply-on-change='true' on-change='setting-changed' value='y-offset' hover-hint='How far the bars appear from the saber.' min='0' max='1' integer-only='false' increment='0.05'></slider-setting>
+		<slider-setting text='Rotation' apply-on-change='true' value='rotation' hover-hint='The angle of the visualizer (not pictured in preview).' min='0' max='360' integer-only='true' increment='5'></slider-setting>
+		<bool-setting text='Bloom Pre-Pass' apply-on-change='true' on-change='setting-changed' value='bloom' hover-hint='Adds a slight glow to each of the bars'></bool-setting>
+	</settings-container>
+</bg>

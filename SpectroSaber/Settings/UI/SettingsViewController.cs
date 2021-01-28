@@ -88,6 +88,17 @@ namespace SpectroSaber.Settings.UI
 			}
 		}
 
+		[UIValue("z-offset")]
+		public float ZOffset
+		{
+			get {
+				return Plugin.Settings.ZOffset;
+			}
+			set {
+				Plugin.Settings.ZOffset = value;
+			}
+		}
+
 		[UIValue("rotation")]
 		public int Rotation
 		{

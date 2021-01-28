@@ -120,7 +120,6 @@
     <Compile Include="ColorSchemeManager.cs" />
     <Compile Include="DefaultSaberGrabber.cs" />
     <Compile Include="Plugin.cs" />
-    <Compile Include="Configuration\PluginConfig.cs" />
     <Compile Include="PreviewSaber.cs" />
     <Compile Include="SaberManager.cs" />
     <Compile Include="Settings\SettingsStore.cs" />
@@ -133,7 +132,6 @@
     <Compile Include="SpectrogramManager.cs" />
     <Compile Include="Settings\UI\SettingsFlowCoordinator.cs" />
     <Compile Include="Settings\UI\SettingsUI.cs" />
-    <Compile Include="TubeLightGrabber.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="manifest.json" />

@@ -30,6 +30,10 @@ namespace SpectroSaber
 				_spectroBarPrefab = SpectroSaberController.Instance.assetBundle.LoadAsset<GameObject>("Assets/Spectrogram/SpectroBar.prefab");
 		}
 
+		private Vector3 GetSaberLocalPositionTarget() {
+			return new Vector3(0, Plugin.Settings.YOffset / 10f, Plugin.Settings.ZOffset);
+		}
+
 		public void InstantiateSpectrogramGroups() {
 			InstantiateLeftSpectrogramGroup();
 			InstantiateRightSpectrogramGroup();
@@ -69,7 +73,7 @@ namespace SpectroSaber
 			if (leftSpectro) {
 				leftSpectro.SetTransparency(Plugin.Settings.Transparency);
 				leftSpectro.UseGrabpass(ShouldUseGrabpass());
-				leftSpectro.transform.localPosition = new Vector3(0, Plugin.Settings.YOffset / 10f, 0);
+				leftSpectro.transform.localPosition = GetSaberLocalPositionTarget();
 				leftSpectro.UseBloomPrePass(Plugin.Settings.BloomPrePass);
 
 				leftSpectro.UpdateMaterial();
@@ -77,7 +81,7 @@ namespace SpectroSaber
 			if (rightSpectro) {
 				rightSpectro.SetTransparency(Plugin.Settings.Transparency);
 				rightSpectro.UseGrabpass(ShouldUseGrabpass());
-				rightSpectro.transform.localPosition = new Vector3(0, Plugin.Settings.YOffset / 10f, 0);
+				rightSpectro.transform.localPosition = GetSaberLocalPositionTarget();
 				rightSpectro.UseBloomPrePass(Plugin.Settings.BloomPrePass);
 
 				rightSpectro.UpdateMaterial();
@@ -96,7 +100,7 @@ namespace SpectroSaber
 			if (group) {
 				group.transform.SetParent(parent);
 				group.transform.position = position;
-				group.transform.localPosition = new Vector3(0, Plugin.Settings.YOffset / 10f, 0);
+				group.transform.localPosition = GetSaberLocalPositionTarget();
 				group.transform.rotation = rotation;
 				group.transform.localScale = localScale;
 			}

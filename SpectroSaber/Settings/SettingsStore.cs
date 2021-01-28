@@ -24,6 +24,8 @@ namespace SpectroSaber.Settings
 
 		public float YOffset { get; set; } = 0;
 
+		public float ZOffset { get; set; } = 0;
+
 		public int Rotation { get; set; } = 60;
 
 		public bool BloomPrePass { get; set; } = true;

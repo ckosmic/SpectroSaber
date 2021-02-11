@@ -42,7 +42,7 @@ namespace SpectroSaber
 		IEnumerator IEGetBasicSpectrumData(Action callback) {
 			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<BasicSpectrogramData>().Any());
 			_spectrogramData = Resources.FindObjectsOfTypeAll<BasicSpectrogramData>().FirstOrDefault();
-			yield return new WaitUntil(() => _spectrogramData.GetField<List<float>, BasicSpectrogramData>("_processedSamples").Count == 64);
+			yield return new WaitUntil(() => _spectrogramData.GetField<List<float>, BasicSpectrogramData>("_processedSamples").Count == _spectrogramData.Samples.Length);
 			_isReady = true;
 			callback();
 		}

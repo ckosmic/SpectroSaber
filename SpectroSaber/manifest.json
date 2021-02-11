@@ -3,7 +3,7 @@
   "id": "SpectroSaber",
   "name": "SpectroSaber",
   "author": "ckosmic",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "description": "Visualizers for your sabers!",
   "gameVersion": "1.13.2",
   "dependsOn": {

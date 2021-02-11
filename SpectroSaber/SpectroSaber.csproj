@@ -151,4 +151,7 @@
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"C:\Program Files (x86)\Steam\steam.exe" -applaunch 620980 -nosplash --verbose fpfc</PostBuildEvent>
+  </PropertyGroup>
 </Project>

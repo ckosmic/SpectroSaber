@@ -65,6 +65,10 @@ namespace SpectroSaber
 				for (int i = 0; i < componentsInChildren2.Length; i++) {
 					DestroyImmediate(componentsInChildren2[i]);
 				}
+				SaberTrail[] componentsInChildren3 = defaultLeftSaber.GetComponentsInChildren<SaberTrail>();
+				for (int i = 0; i < componentsInChildren3.Length; i++) {
+					DestroyImmediate(componentsInChildren3[i]);
+				}
 				DontDestroyOnLoad(defaultLeftSaber);
 				defaultLeftSaber.transform.SetParent(transform);
 				defaultLeftSaber.gameObject.name = "SSLeftSaber";

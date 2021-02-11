@@ -15,7 +15,7 @@ namespace SpectroSaber
 			ColorScheme colorScheme = ColorSchemeManager.GetMainColorScheme();
 			Color color = colorScheme.saberAColor;
 
-			Renderer[] childrenRenderers = GetComponentsInChildren<Renderer>();
+			Renderer[] childrenRenderers = gameObject.GetComponentsInChildren<Renderer>();
 			for (int i = 0; i < childrenRenderers.Length; i++) {
 				foreach (Material mat in childrenRenderers[i].materials) {
 					mat.color = color;
@@ -26,10 +26,6 @@ namespace SpectroSaber
 					if (mat.HasProperty("_AddColor"))
 						mat.SetColor("_AddColor", (color * 0.5f).ColorWithAlpha(0f));
 				}
-			}
-			SaberTrail[] childrenTrails = GetComponentsInChildren<SaberTrail>();
-			for (int i = 0; i < childrenTrails.Length; i++) {
-				ReflectionUtil.SetField<SaberTrail, Color>(childrenTrails[i], "_color", color);
 			}
 		}
 

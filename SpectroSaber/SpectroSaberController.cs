@@ -54,7 +54,7 @@ namespace SpectroSaber
 		public void OnGameSceneLoaded() {
 			if (Plugin.Settings.Enabled) {
 				SaberManager.Instance.GetSabers(() => {
-					SpectrogramData.Instance.GetBasicSpectrumData(() => {
+					SpectrogramData.Instance.SetBasicSpectrogramDataAudioSourceGame(() => {
 						SpectrogramManager.Instance.InstantiateSpectrogramGroups();
 						SpectrogramManager.Instance.ParentSpectrogramsToSabers();
 						SpectrogramManager.Instance.SetSpectrogramColors();

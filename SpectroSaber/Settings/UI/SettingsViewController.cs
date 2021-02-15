@@ -66,6 +66,9 @@ namespace SpectroSaber.Settings.UI
 		[UIValue("trans-modes")]
 		public List<object> TransModes = new object[] { "Dither", "GrabPass" }.ToList();
 
+		[UIValue("bar-counts")]
+		public List<object> BarCounts = new object[] { 64, 128, 256 }.ToList();
+
 		[UIValue("trans-mode")]
 		public string TransMode
 		{
@@ -121,14 +124,47 @@ namespace SpectroSaber.Settings.UI
 			}
 		}
 
+		[UIValue("bar-count")]
+		public int BarCount
+		{
+			get {
+				return Plugin.Settings.BarCount;
+			}
+			set {
+				Plugin.Settings.BarCount = value;
+			}
+		}
+
+		[UIValue("ss-spacing")]
+		public float Spacing
+		{
+			get {
+				return Plugin.Settings.Spacing;
+			}
+			set {
+				Plugin.Settings.Spacing = value;
+			}
+		}
+
 		[UIAction("setting-changed")]
 		private void SettingChanged(object value) {
 			StartCoroutine(ApplySettings());
 		}
 
+		[UIAction("bar-count-changed")]
+		private void BarCountChanged(object value) {
+			StartCoroutine(ApplyBarChange());
+		}
+
 		IEnumerator ApplySettings() {
 			yield return new WaitForSecondsRealtime(0.1f);
 			SpectrogramManager.Instance.UpdateSpectrogramGroupProperties();
+		}
+
+		IEnumerator ApplyBarChange() {
+			yield return new WaitForSecondsRealtime(0.1f);
+			PreviewViewController.Instance.UpdateBasicSpectrogramData();
+			PreviewViewController.Instance.ResetPreviewSpectrogram();
 		}
 	}
 }

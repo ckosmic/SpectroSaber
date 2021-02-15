@@ -14,24 +14,27 @@ namespace SpectroSaber
 		private Material _barMaterial = null;
 
 		private void CreateBarMaterial() {
-			Shader shader = SpectroSaberController.Instance.assetBundle.LoadAsset<Shader>("Assets/Spectrogram/SpectroShader.shader");
-			_barMaterial = new Material(shader);
-			_barMaterial.SetFloat("_Glow", 0.25f);
-			_barMaterial.SetFloat("_FresnelGlow", 0.5f);
+			if (_barMaterial == null) {
+				Shader shader = SpectroSaberController.Instance.assetBundle.LoadAsset<Shader>("Assets/Spectrogram/SpectroShader.shader");
+				_barMaterial = new Material(shader);
+				_barMaterial.SetFloat("_Glow", 0.25f);
+				_barMaterial.SetFloat("_FresnelGlow", 0.5f);
+			}
 		}
 
 		public void InstantiateBars(GameObject barPrefab) {
 			CreateBarMaterial();
 
-			_meshRenderers = new MeshRenderer[64];
-			_lineRenderers = new LineRenderer[64];
+			_meshRenderers = new MeshRenderer[Plugin.Settings.BarCount];
+			_lineRenderers = new LineRenderer[Plugin.Settings.BarCount];
 
+			float densityFactor = 64f / Plugin.Settings.BarCount;
+			float spacing = 3 * Plugin.Settings.Spacing * densityFactor;
 			for (int i = 0; i < _meshRenderers.Length; i++) {
-				MeshRenderer barRenderer = Instantiate(barPrefab, new Vector3(0, 0, (i + 3) * 3), Quaternion.identity, transform).GetComponent<MeshRenderer>();
-				barRenderer.sharedMaterial = _barMaterial;
-				_meshRenderers[i] = barRenderer;
-				_lineRenderers[i] = barRenderer.transform.GetChild(0).GetComponent<LineRenderer>();
-				_lineRenderers[i].widthMultiplier = 0.05f;
+				_meshRenderers[i] = Instantiate(barPrefab, new Vector3(0, 0, i * spacing + 9), Quaternion.identity, transform).GetComponent<MeshRenderer>();
+				_meshRenderers[i].sharedMaterial = _barMaterial;
+				_lineRenderers[i] = _meshRenderers[i].transform.GetChild(0).GetComponent<LineRenderer>();
+				_lineRenderers[i].widthMultiplier = 0.05f * densityFactor;
 			}
 		}
 
@@ -72,6 +75,12 @@ namespace SpectroSaber
 			}
 		}
 
+		public void SetSpacing(float spacing) {
+			for (int i = 0; i < _meshRenderers.Length; i++) {
+				_meshRenderers[i].transform.localPosition = new Vector3(0, 0, i * spacing + 9);
+			}
+		}
+
 		public void UpdateMaterial() {
 			for (int i = 0; i < _meshRenderers.Length; i++) {
 				_meshRenderers[i].sharedMaterial = _barMaterial;
@@ -94,13 +103,23 @@ namespace SpectroSaber
 			}
 		}
 
+		public void DestroyBars() {
+			foreach (MeshRenderer rend in _meshRenderers) {
+				DestroyImmediate(rend.gameObject);
+			}
+			_meshRenderers = null;
+			_lineRenderers = null;
+		}
+
 		public void UpdateSpectogramData(List<float> samples) {
+			float densityFactor = 64f / Plugin.Settings.BarCount;
+			float barThickness = Plugin.Settings.Thickness * densityFactor;
 			for (int i = 0; i < _meshRenderers.Length; i++) {
-				_meshRenderers[i].transform.localScale = new Vector3(Plugin.Settings.Thickness, samples[i] * Plugin.Settings.Intensity, Plugin.Settings.Thickness);
+				_meshRenderers[i].transform.localScale = new Vector3(barThickness, samples[i] * Plugin.Settings.Intensity, barThickness);
 				if (_lineRenderers[i].enabled) {
 					_lineRenderers[i].transform.localPosition = new Vector3(0, -samples[i] * 0.1f, 0);
 					_lineRenderers[i].transform.localScale = new Vector3(1, 1 + samples[i] * 0.2f, 1);
-					_lineRenderers[i].widthMultiplier = 0.05f * Plugin.Settings.Thickness;
+					_lineRenderers[i].widthMultiplier = 0.05f * barThickness;
 				}
 			}
 		}

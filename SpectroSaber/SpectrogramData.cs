@@ -9,11 +9,11 @@ using UnityEngine;
 
 namespace SpectroSaber
 {
-	internal class SpectrogramData : MonoBehaviour
-	{
+	internal class SpectrogramData : MonoBehaviour {
 		public static SpectrogramData Instance { get; private set; }
 
-		private BasicSpectrogramData _spectrogramData;
+		public BasicSpectrogramData basicSpectrogramData;
+
 		private bool _isReady = false;
 
 		private void Awake() {
@@ -22,28 +22,54 @@ namespace SpectroSaber
 		}
 
 		public List<float> GetProcessedSamples() {
-			if (_spectrogramData != null && _isReady) {
+			if (basicSpectrogramData != null) {
 				try {
-					return _spectrogramData.ProcessedSamples;
+					return basicSpectrogramData.ProcessedSamples;
 				} catch (Exception e) {
 					Plugin.Log.Error("Failed to retrieve processed samples: " + e);
 					return null;
 				}
 			} else {
-				Plugin.Log.Error("BasicSpectrogramData object is null!");
+				Plugin.Log.Error("BasicSpectrogramData object is null, can't get processed samples!");
 				return null;
 			}
 		}
 
-		public void GetBasicSpectrumData(Action callback) {
-			StartCoroutine(IEGetBasicSpectrumData(callback));
+		public void SetBasicSpectrogramDataAudioSourceGame(Action callback) {
+			StartCoroutine(IESetBasicSpectrogramDataAudioSourceGame(callback));
 		}
 
-		IEnumerator IEGetBasicSpectrumData(Action callback) {
+		public void CreateBasicSpectrogramData() {
+			basicSpectrogramData = new GameObject("SSBasicSpectrogramData").AddComponent<BasicSpectrogramData>();
+			DontDestroyOnLoad(basicSpectrogramData);
+			UpdateBasicSpectrogramData();
+		}
+
+		public void UpdateBasicSpectrogramData() {
+			if (basicSpectrogramData != null) {
+				List<float> processedSamplesList = new List<float>(Plugin.Settings.BarCount);
+				for (int i = 0; i < Plugin.Settings.BarCount; i++) {
+					processedSamplesList.Add(0f);
+				}
+				basicSpectrogramData.SetField<BasicSpectrogramData, List<float>>("_processedSamples", processedSamplesList);
+				basicSpectrogramData.SetField<BasicSpectrogramData, float[]>("_samples", new float[Plugin.Settings.BarCount]);
+				basicSpectrogramData.SetField<BasicSpectrogramData, bool>("_hasData", false);
+				basicSpectrogramData.SetField<BasicSpectrogramData, bool>("_hasProcessedData", false);
+			} else {
+				Plugin.Log.Error("BasicSpectrogramData object is null, can't reinitialize sample lists!");
+			}
+		}
+
+		public void SetBasicSpectrogramDataAudioSource(AudioSource aud) {
+			basicSpectrogramData.SetField<BasicSpectrogramData, AudioSource>("_audioSource", aud);
+		}
+
+		IEnumerator IESetBasicSpectrogramDataAudioSourceGame(Action callback) {
 			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<BasicSpectrogramData>().Any());
-			_spectrogramData = Resources.FindObjectsOfTypeAll<BasicSpectrogramData>().FirstOrDefault();
-			yield return new WaitUntil(() => _spectrogramData.GetField<List<float>, BasicSpectrogramData>("_processedSamples").Count == _spectrogramData.Samples.Length);
-			_isReady = true;
+			BasicSpectrogramData gameSpectrogramData = Resources.FindObjectsOfTypeAll<BasicSpectrogramData>().First(bsd => bsd.transform.name != "SSBasicSpectrogramData");
+			yield return new WaitUntil(() => gameSpectrogramData.GetField<List<float>, BasicSpectrogramData>("_processedSamples").Count == gameSpectrogramData.Samples.Length);
+			AudioSource gameAudioSource = gameSpectrogramData.GetField<AudioSource, BasicSpectrogramData>("_audioSource");
+			SetBasicSpectrogramDataAudioSource(gameAudioSource);
 			callback();
 		}
 	}

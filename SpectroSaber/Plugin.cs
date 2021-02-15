@@ -57,7 +57,8 @@ namespace SpectroSaber
 			new GameObject("SpectroSaberController").AddComponent<SpectroSaberController>();
 			new GameObject("SSSaberManager").AddComponent<SaberManager>();
 			new GameObject("SSSpectrogramManager").AddComponent<SpectrogramManager>();
-			new GameObject("SSSpectrogramData").AddComponent<SpectrogramData>();
+			SpectrogramData sd = new GameObject("SSSpectrogramData").AddComponent<SpectrogramData>();
+			sd.CreateBasicSpectrogramData();
 
 			SettingsUI.CreateButton();
 

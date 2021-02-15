@@ -24,7 +24,6 @@ namespace SpectroSaber.Settings.UI
 		public bool doneGeneratingPreview;
 
 		private AudioSource _audioSource;
-		private BasicSpectrogramData _basicSpectrogramData;
 		private float _maxPreviewVolume = 0.5f;
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
@@ -50,19 +49,31 @@ namespace SpectroSaber.Settings.UI
 		}
 
 		public void UpdatePreviewSpectrogram() {
-			if (_basicSpectrogramData == null) {
-				_basicSpectrogramData = new GameObject("SSBasicSpectrogramData").AddComponent<BasicSpectrogramData>();
-			} else {
+			if (SpectrogramData.Instance.basicSpectrogramData != null) {
 				if (_audioSource != null) {
-					if (_basicSpectrogramData.GetField<AudioSource>("_audioSource") == null) {
-						_basicSpectrogramData.SetField("_audioSource", _audioSource);
-					}
+					SpectrogramData.Instance.SetBasicSpectrogramDataAudioSource(_audioSource);
 					_audioSource.volume = Mathf.Lerp(_audioSource.volume, _maxPreviewVolume, Time.deltaTime * 3);
 					if (SpectrogramManager.Instance.leftSpectro != null) {
-						SpectrogramManager.Instance.leftSpectro.UpdateSpectogramData(_basicSpectrogramData.ProcessedSamples);
+						SpectrogramManager.Instance.leftSpectro.UpdateSpectogramData(SpectrogramData.Instance.basicSpectrogramData.ProcessedSamples);
 					}
 				}
 			}
+		}
+
+		public void UpdateBasicSpectrogramData() {
+			SpectrogramData.Instance.UpdateBasicSpectrogramData();
+		}
+
+		public void ResetPreviewSpectrogram() {
+			if (SpectrogramManager.Instance.leftSpectro) {
+				SpectrogramManager.Instance.leftSpectro.DestroyBars();
+				DestroyImmediate(SpectrogramManager.Instance.leftSpectro);
+			}
+			SpectrogramManager.Instance.InstantiateLeftSpectrogramGroup();
+			SpectrogramManager.Instance.SetPreviewSpectrogramColors();
+			SpectrogramManager.Instance.ParentAndPositionSpectrogramGroup(SpectrogramManager.Instance.leftSpectro, previewSaber.transform, previewSaber.transform.position, previewSaber.transform.rotation, Vector3.one * 0.005f);
+			List<float> tmpSamples = new float[Plugin.Settings.BarCount].ToList();
+			SpectrogramManager.Instance.UpdateSpectrogramData(tmpSamples);
 		}
 
 		private void ClearSabers() {
@@ -78,9 +89,8 @@ namespace SpectroSaber.Settings.UI
 			if(_audioSource)
 				DestroyImmediate(_audioSource);
 			_audioSource = null;
-			if (_basicSpectrogramData)
-				DestroyImmediate(_basicSpectrogramData);
-			_basicSpectrogramData = null;
+			if (SpectrogramData.Instance.basicSpectrogramData)
+				SpectrogramData.Instance.SetBasicSpectrogramDataAudioSource(null);
 		}
 
 		public void GeneratePreview() {
@@ -101,11 +111,7 @@ namespace SpectroSaber.Settings.UI
 					previewSaber.name = "SSPreviewSaber";
 					previewSaber.SetActive(true);
 
-					SpectrogramManager.Instance.InstantiateLeftSpectrogramGroup();
-					SpectrogramManager.Instance.SetPreviewSpectrogramColors();
-					SpectrogramManager.Instance.ParentAndPositionSpectrogramGroup(SpectrogramManager.Instance.leftSpectro, previewSaber.transform, previewSaber.transform.position, previewSaber.transform.rotation, Vector3.one * 0.005f);
-					List<float> tmpSamples = new float[64].ToList();
-					SpectrogramManager.Instance.UpdateSpectrogramData(tmpSamples);
+					ResetPreviewSpectrogram();
 
 					yield break;
 				} catch (Exception e) {

@@ -70,11 +70,14 @@ namespace SpectroSaber
 		}
 
 		public void UpdateSpectrogramGroupProperties() {
+			float densityFactor = 64f / Plugin.Settings.BarCount;
+			float spacing = 3 * Plugin.Settings.Spacing * densityFactor;
 			if (leftSpectro) {
 				leftSpectro.SetTransparency(Plugin.Settings.Transparency);
 				leftSpectro.UseGrabpass(ShouldUseGrabpass());
 				leftSpectro.transform.localPosition = GetSaberLocalPositionTarget();
 				leftSpectro.UseBloomPrePass(Plugin.Settings.BloomPrePass);
+				leftSpectro.SetSpacing(spacing);
 
 				leftSpectro.UpdateMaterial();
 			}
@@ -83,6 +86,7 @@ namespace SpectroSaber
 				rightSpectro.UseGrabpass(ShouldUseGrabpass());
 				rightSpectro.transform.localPosition = GetSaberLocalPositionTarget();
 				rightSpectro.UseBloomPrePass(Plugin.Settings.BloomPrePass);
+				rightSpectro.SetSpacing(spacing);
 
 				rightSpectro.UpdateMaterial();
 			}
@@ -123,9 +127,9 @@ namespace SpectroSaber
 
 		public void CleanupSpectrogramGroups() {
 			if (leftSpectro)
-				Destroy(leftSpectro);
+				DestroyImmediate(leftSpectro);
 			if (rightSpectro)
-				Destroy(rightSpectro);
+				DestroyImmediate(rightSpectro);
 			leftSpectro = null;
 			rightSpectro = null;
 		}

@@ -29,5 +29,9 @@ namespace SpectroSaber.Settings
 		public int Rotation { get; set; } = 60;
 
 		public bool BloomPrePass { get; set; } = true;
+
+		public int BarCount { get; set; } = 64;
+
+		public float Spacing { get; set; } = 1.0f;
 	}
 }

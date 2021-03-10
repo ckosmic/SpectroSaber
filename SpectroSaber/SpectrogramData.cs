@@ -14,8 +14,6 @@ namespace SpectroSaber
 
 		public BasicSpectrogramData basicSpectrogramData;
 
-		private bool _isReady = false;
-
 		private void Awake() {
 			DontDestroyOnLoad(this);
 			Instance = this;

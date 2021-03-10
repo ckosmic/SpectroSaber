@@ -25,6 +25,7 @@ namespace SpectroSaber.Settings.UI
 
 		private AudioSource _audioSource;
 		private float _maxPreviewVolume = 0.5f;
+		private SongPreviewPlayer _songPreviewPlayer;
 
 		protected override void DidActivate(bool firstActivation, bool addedToHierarchy, bool screenSystemEnabling) {
 			base.DidActivate(firstActivation, addedToHierarchy, screenSystemEnabling);
@@ -44,6 +45,7 @@ namespace SpectroSaber.Settings.UI
 
 		protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling) {
 			base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
+			_songPreviewPlayer.CrossFadeToDefault();
 			ClearPreview();
 			Instance = null;
 		}
@@ -128,19 +130,25 @@ namespace SpectroSaber.Settings.UI
 			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<MainSettingsModelSO>().Any());
 			MainSettingsModelSO mainSettings = Resources.FindObjectsOfTypeAll<MainSettingsModelSO>().FirstOrDefault();
 			_maxPreviewVolume = mainSettings.volume * 0.5f;
+
+			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<SongPreviewPlayer>().Any());
+			_songPreviewPlayer = Resources.FindObjectsOfTypeAll<SongPreviewPlayer>().FirstOrDefault();
+			_songPreviewPlayer.FadeOut(1);
+
 			yield return new WaitUntil(() => Resources.FindObjectsOfTypeAll<BeatmapLevelsModel>().Any());
 			BeatmapLevelsModel levelsModel = Resources.FindObjectsOfTypeAll<BeatmapLevelsModel>().FirstOrDefault();
 			BeatmapLevelPackCollectionSO packCollectionSO = levelsModel.ostAndExtrasPackCollection;
 			BeatmapLevelPackSO[] levelPack = packCollectionSO.GetField<BeatmapLevelPackSO[]>("_beatmapLevelPacks");
-			BeatmapLevelCollectionSO levelCollectionSO = levelPack[0].GetField<BeatmapLevelCollectionSO>("_beatmapLevelCollection");
+			BeatmapLevelCollectionSO levelCollectionSO = levelPack[4].GetField<BeatmapLevelCollectionSO>("_beatmapLevelCollection");
 			BeatmapLevelSO[] levels = levelCollectionSO.GetField<BeatmapLevelSO[]>("_beatmapLevels");
-			AudioClip clip = levels[0].GetField<AudioClip>("_audioClip");
+
+			AudioClip clip = levels[1].GetField<AudioClip>("_audioClip");
 			_audioSource = new GameObject("SSAudSource").AddComponent<AudioSource>();
 			_audioSource.clip = clip;
 			_audioSource.spatialBlend = 0;
 			_audioSource.loop = true;
 			_audioSource.volume = 0;
-			_audioSource.time = 15f;
+			_audioSource.time = 20f;
 			_audioSource.Play();
 		}
 	}

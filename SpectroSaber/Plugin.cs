@@ -34,7 +34,6 @@ namespace SpectroSaber
 			Log = logger;
 
 			Settings = config.Generated<SettingsStore>();
-			//BSMLSettings.instance.AddSettingsMenu("SpectroSaber", $"SpectroSaber.Settings.bsml", Settings);
 
 			Log.Info("SpectroSaber initialized.");
 		}

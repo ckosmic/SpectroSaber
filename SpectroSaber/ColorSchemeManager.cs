@@ -12,12 +12,8 @@ namespace SpectroSaber
 	{
 		public static ColorScheme GetMainColorScheme() {
 			ColorSchemesSettings colorSchemesSettings = ReflectionUtil.GetField<PlayerData, PlayerDataModel>(Resources.FindObjectsOfTypeAll<PlayerDataModel>().FirstOrDefault(), "_playerData").colorSchemesSettings;
-			ColorScheme colorScheme = colorSchemesSettings.overrideDefaultColors ? colorSchemesSettings.GetColorSchemeForId(colorSchemesSettings.selectedColorSchemeId) : GetDefaultColorScheme();
+			ColorScheme colorScheme = colorSchemesSettings.GetSelectedColorScheme();
 			return colorScheme;
-		}
-
-		private static ColorScheme GetDefaultColorScheme() {
-			return ReflectionUtil.GetField<ColorScheme, ColorManager>(Resources.FindObjectsOfTypeAll<ColorManager>().FirstOrDefault(), "_colorScheme");
 		}
 	}
 }

@@ -139,7 +139,7 @@ namespace SpectroSaber.Settings.UI
 			BeatmapLevelsModel levelsModel = Resources.FindObjectsOfTypeAll<BeatmapLevelsModel>().FirstOrDefault();
 			BeatmapLevelPackCollectionSO packCollectionSO = levelsModel.ostAndExtrasPackCollection;
 			BeatmapLevelPackSO[] levelPack = packCollectionSO.GetField<BeatmapLevelPackSO[]>("_beatmapLevelPacks");
-			BeatmapLevelCollectionSO levelCollectionSO = levelPack[4].GetField<BeatmapLevelCollectionSO>("_beatmapLevelCollection");
+			BeatmapLevelCollectionSO levelCollectionSO = levelPack[5].GetField<BeatmapLevelCollectionSO>("_beatmapLevelCollection");
 			BeatmapLevelSO[] levels = levelCollectionSO.GetField<BeatmapLevelSO[]>("_beatmapLevels");
 
 			AudioClip clip = levels[1].GetField<AudioClip>("_audioClip");

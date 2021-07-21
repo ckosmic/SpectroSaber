@@ -45,7 +45,7 @@ namespace SpectroSaber.Settings.UI
 
 		protected override void DidDeactivate(bool removedFromHierarchy, bool screenSystemDisabling) {
 			base.DidDeactivate(removedFromHierarchy, screenSystemDisabling);
-			_songPreviewPlayer.CrossFadeToDefault();
+			_songPreviewPlayer.CrossfadeToDefault();
 			ClearPreview();
 			Instance = null;
 		}

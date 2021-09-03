@@ -3,9 +3,9 @@
   "id": "SpectroSaber",
   "name": "SpectroSaber",
   "author": "ckosmic",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "Visualizers for your sabers!",
-  "gameVersion": "1.16.3",
+  "gameVersion": "1.17.0",
   "dependsOn": {
     "BSIPA": "^4.2.0",
     "SiraUtil": "^2.5.6",
